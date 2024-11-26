@@ -1,12 +1,18 @@
 # aiveex-img
 
-Source: https://github.com/phusion/baseimage-docker
-Source: https://registry.hub.docker.com/r/phusion/baseimage/
-Source: https://github.com/phusion/baseimage-docker/releases?page=3
+
+## About
+
+Fork of phusion/baseimage-docker
+
+* **Source**: https://github.com/phusion/baseimage-docker
+* **Source**: https://registry.hub.docker.com/r/phusion/baseimage/
+* **Source**: https://github.com/phusion/baseimage-docker/releases?page=3
 
 https://hub.docker.com/r/phusion/baseimage/tags
 
-Dockerfile.txt is sge Dockerfile
+* **Dockerfile.txt** is from https://github.com/diixo/docker-sge/Dockerfile
+
 
 ## build
 
@@ -14,10 +20,12 @@ Dockerfile.txt is sge Dockerfile
 docker build -f image/Dockerfile -t viix:22.04 .
 ```
 
+
 # build and run
 ```
 docker build -f image/Dockerfile -t viix:22.04 . && docker run -d --name viix-container viix:22.04
 ```
+
 
 ### What are the problems with the stock Ubuntu base image?
 
@@ -30,6 +38,7 @@ Baseimage-docker gets everything right. The "Contents" section describes all the
 You can configure the stock ubuntu image yourself from your Dockerfile, so why bother using baseimage-docker?
 
 Configuring the base system for Docker-friendliness is no easy task. As stated before, there are many corner cases. By the time that you've gotten all that right, you've reinvented baseimage-docker. Using baseimage-docker will save you from this effort.
-It sets up the base system correctly. Many people may not think so, but Unix has many corner cases caused by decades of cruft. Getting them wrong can result in very strange problems. This image does everything correctly. Learn more.⁠
-It reduces the time needed to run docker build, allowing you to iterate your Dockerfile more quickly.
-It reduces download time during redeploys. Docker only needs to download the base image once: during the first deploy. On every subsequent deploys, only the changes you make on top of the base image are downloaded.
+
+* It sets up the base system correctly. Many people may not think so, but Unix has many corner cases caused by decades of cruft. Getting them wrong can result in very strange problems. This image does everything correctly. Learn more.⁠
+* It reduces the time needed to run docker build, allowing you to iterate your Dockerfile more quickly.
+* It reduces download time during redeploys. Docker only needs to download the base image once: during the first deploy. On every subsequent deploys, only the changes you make on top of the base image are downloaded.
