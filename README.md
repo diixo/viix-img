@@ -49,6 +49,26 @@ Configuring the base system for Docker-friendliness is no easy task. As stated b
 * It reduces download time during redeploys. Docker only needs to download the base image once: during the first deploy. On every subsequent deploys, only the changes you make on top of the base image are downloaded.
 
 
+## Contents
+
+Baseimage-docker only contains essential components. Learn more about the rationale.⁠
+
+Ubuntu 16.04 LTS as base system.
+
+* A correct init process (learn more⁠).
+* Fixes APT incompatibilities with Docker.
+* syslog-ng.
+* The cron daemon.
+* * An optional SSH server (disabled by default), for those use cases where docker exec is inappropriate.
+Password and challenge-response authentication are disabled by default. Only key authentication is allowed.
+* * It allows an predefined key by default to make debugging easy. You should replace this ASAP. See instructions.
+
+* [Runit](https://smarden.org/runit) for service supervision and management.
+
+
+[Learn more](https://github.com/phusion/baseimage-docker)
+
+
 ## References:
 
 * **Source**: https://github.com/phusion/baseimage-docker
