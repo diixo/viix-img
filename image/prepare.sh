@@ -10,13 +10,9 @@ export INITRD=no
 mkdir -p /etc/container_environment
 echo -n no > /etc/container_environment/INITRD
 
-## Enable Ubuntu Universe, Multiverse, and deb-src for main.
-if grep -E '^ID=' /etc/os-release | grep -q ubuntu; then
-  sed -i 's/^#\s*\(deb.*main restricted\)$/\1/g' /etc/apt/sources.list
-  sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
-  sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
-fi
-
+## Enable Ubuntu Universe and Multiverse.
+sed -i 's/^#\s*\(deb.*universe\)$/\1/g' /etc/apt/sources.list
+sed -i 's/^#\s*\(deb.*multiverse\)$/\1/g' /etc/apt/sources.list
 apt-get update
 
 ## Fix some issues with APT packages.
@@ -34,6 +30,8 @@ ln -sf /bin/true /usr/bin/ischroot
 # apt-utils fix for Ubuntu 16.04
 $minimal_apt_get_install apt-utils
 
+$minimal_apt_get_install syslog-ng
+
 ## Install HTTPS support for APT.
 $minimal_apt_get_install apt-transport-https ca-certificates
 
@@ -41,19 +39,10 @@ $minimal_apt_get_install apt-transport-https ca-certificates
 $minimal_apt_get_install software-properties-common
 
 ## Upgrade all packages.
-apt-get dist-upgrade -y --no-install-recommends -o Dpkg::Options::="--force-confold"
+apt-get dist-upgrade -y --no-install-recommends
 
 ## Fix locale.
-case $(lsb_release -is) in
-  Ubuntu)
-    $minimal_apt_get_install language-pack-en
-    ;;
-  Debian)
-    $minimal_apt_get_install locales locales-all
-    ;;
-  *)
-    ;;
-esac
+$minimal_apt_get_install language-pack-en
 locale-gen en_US
 update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
 echo -n en_US.UTF-8 > /etc/container_environment/LANG

@@ -17,13 +17,17 @@ https://hub.docker.com/r/phusion/baseimage/tags
 ## build
 
 ```
-docker build -f image/Dockerfile -t viix:22.04 .
+docker build -f image/Dockerfile -t viix:16.04 .
 ```
 
-
-# build and run
+## run
 ```
-docker build -f image/Dockerfile -t viix:22.04 . && docker run -d --name viix-container viix:22.04
+docker run -d --name viix-container viix:16.04
+```
+
+## access into docker
+```
+winpty docker exec -it viix-container bash
 ```
 
 

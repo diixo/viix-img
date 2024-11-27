@@ -23,24 +23,19 @@ VERSION_ARG ?= $(VERSION)
 all: build
 
 build:
-	docker build --no-cache -t $(NAME):$(VERSION_ARG) $(BUILD_ARG) --build-arg QEMU_ARCH=$(QEMU_ARCH) --platform $(PLATFORM) --rm image
-
-build_multiarch:
-	env NAME=$(NAME) VERSION=$(VERSION_ARG) ./build-multiarch.sh
+	docker build -t $(NAME):$(VERSION) --rm image
 
 test:
-	env NAME=$(NAME) VERSION=$(VERSION_ARG) ./test/runner.sh
+	env NAME=$(NAME) VERSION=$(VERSION) ./test/runner.sh
 
 tag_latest:
-	docker tag $(NAME):$(VERSION_ARG) $(NAME):$(LATEST_VERSION)
+	docker tag -f $(NAME):$(VERSION) $(NAME):latest
 
-tag_multiarch_latest:
-	env NAME=$(NAME) VERSION=$(VERSION) TAG_LATEST=true ./build-multiarch.sh
-
-release: test
-	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION_ARG); then echo "$(NAME) version $(VERSION_ARG) is not yet built. Please run 'make build'"; false; fi
+release: test tag_latest
+	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
+	@if ! head -n 1 Changelog.md | grep -q 'release date'; then echo 'Please note the release date in Changelog.md.' && false; fi
 	docker push $(NAME)
-	@echo "*** Don't forget to create a tag by creating an official GitHub release."
+	@echo "*** Don't forget to create a tag. git tag rel-$(VERSION) && git push origin rel-$(VERSION)"
 
 ssh: SSH_COMMAND?=
 ssh:
