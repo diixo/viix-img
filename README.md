@@ -1,17 +1,9 @@
 # aiveex-img
 
 
-## About
+Fork of **phusion/baseimage-docker**
 
-Fork of phusion/baseimage-docker
-
-* **Source**: https://github.com/phusion/baseimage-docker
-* **Source**: https://registry.hub.docker.com/r/phusion/baseimage/
-* **Source**: https://github.com/phusion/baseimage-docker/releases?page=3
-
-https://hub.docker.com/r/phusion/baseimage/tags
-
-* **Dockerfile.txt** is from https://github.com/diixo/docker-sge/Dockerfile
+Current version was adapted for ubuntu: 16.04
 
 
 ## build
@@ -20,10 +12,19 @@ https://hub.docker.com/r/phusion/baseimage/tags
 docker build -f image/Dockerfile -t viix:16.04 .
 ```
 
+
 ## run
 ```
 docker run -d --name viix-container viix:16.04
 ```
+
+
+## stop all active containers
+
+```
+docker stop $(docker ps -q)
+```
+
 
 ## access into docker
 ```
@@ -46,3 +47,13 @@ Configuring the base system for Docker-friendliness is no easy task. As stated b
 * It sets up the base system correctly. Many people may not think so, but Unix has many corner cases caused by decades of cruft. Getting them wrong can result in very strange problems. This image does everything correctly. Learn more.⁠
 * It reduces the time needed to run docker build, allowing you to iterate your Dockerfile more quickly.
 * It reduces download time during redeploys. Docker only needs to download the base image once: during the first deploy. On every subsequent deploys, only the changes you make on top of the base image are downloaded.
+
+
+## References:
+
+* **Source**: https://github.com/phusion/baseimage-docker
+* **Source**: https://github.com/phusion/baseimage-docker/releases?page=3
+* **Source**: https://registry.hub.docker.com/r/phusion/baseimage/
+* **Source**: https://hub.docker.com/r/phusion/baseimage/tags
+
+* **Dockerfile.txt** is from https://github.com/diixo/docker-sge/Dockerfile

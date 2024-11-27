@@ -1,5 +1,4 @@
 .DS_Store
 .vagrant
 *.swp
-*.tar.gz
-*.log
+
