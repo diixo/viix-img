@@ -7,7 +7,6 @@ Current version was adapted for ubuntu: 16.04
 
 
 ## build
-
 ```
 docker build -f image/Dockerfile -t viix:16.04 .
 ```
@@ -20,9 +19,9 @@ docker run -d --name viix-container viix:16.04
 
 
 ## stop all active containers
-
 ```
 docker stop $(docker ps -q)
+docker rm $(docker ps -q)
 ```
 
 
