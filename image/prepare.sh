@@ -38,8 +38,15 @@ $minimal_apt_get_install apt-transport-https ca-certificates
 ## Install add-apt-repository
 $minimal_apt_get_install software-properties-common
 
+## Install extended packages
+apt-get install -y wget build-essential automake autoconf nano
+
 ## Upgrade all packages.
 apt-get dist-upgrade -y --no-install-recommends
+
+## Update libssl1.1
+wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
 
 ## Fix locale.
 $minimal_apt_get_install language-pack-en

@@ -3,18 +3,24 @@
 
 Fork of **phusion/baseimage-docker**
 
-Current version was adapted for ubuntu: 16.04
+Current version was adapted for ubuntu: 22.04
 
 
 ## build
 ```
-docker build -f image/Dockerfile -t viix:16.04 .
+docker build -f image/Dockerfile -t viix:22.04 .
 ```
 
 
 ## run
 ```
-docker run -d --name viix-container viix:16.04
+docker run -d --name viix-container viix:22.04
+```
+
+
+## access into docker
+```
+winpty docker exec -it viix-container bash
 ```
 
 
@@ -22,12 +28,6 @@ docker run -d --name viix-container viix:16.04
 ```
 docker stop $(docker ps -q)
 docker rm $(docker ps -q)
-```
-
-
-## access into docker
-```
-winpty docker exec -it viix-container bash
 ```
 
 
