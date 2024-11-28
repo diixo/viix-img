@@ -27,7 +27,6 @@ winpty docker exec -it viix-container bash
 ## stop all active containers
 ```
 docker stop $(docker ps -q)
-docker rm $(docker ps -q)
 ```
 
 
