@@ -36,10 +36,12 @@ $minimal_apt_get_install syslog-ng
 $minimal_apt_get_install apt-transport-https ca-certificates
 
 ## Install add-apt-repository
-$minimal_apt_get_install software-properties-common
+$minimal_apt_get_install software-properties-common gpg-agent
+
+add-apt-repository -y ppa:deadsnakes/ppa
 
 ## Install extended packages
-apt-get install -y wget build-essential automake autoconf nano
+apt-get install -y wget build-essential automake autoconf nano python3-pip
 
 ## Upgrade all packages.
 apt-get dist-upgrade -y --no-install-recommends
