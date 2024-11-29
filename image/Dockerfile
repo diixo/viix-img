@@ -3,6 +3,7 @@ FROM ubuntu:22.04
 
 COPY image/ /bd_build/
 
+
 RUN /bd_build/prepare.sh && \
 	/bd_build/system_services.sh && \
 	/bd_build/utilities.sh && \
@@ -15,5 +16,14 @@ ENV DEBIAN_FRONTEND="teletype" \
     LANG="en_US.UTF-8" \
     LANGUAGE="en_US:en" \
     LC_ALL="en_US.UTF-8"
+
+# SSH-enabled: ------------------>
+RUN rm -f /etc/service/sshd/down
+
+# Regenerate SSH host keys. baseimage-docker does not contain any, so you
+# have to do that yourself. You may also comment out this instruction; the
+# init system will auto-generate one during boot.
+RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+# <-------------------------------
 
 CMD ["/sbin/my_init"]

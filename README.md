@@ -24,6 +24,10 @@ winpty docker exec -it viix-container bash
 ```
 
 
+## SSH status
+service ssh status
+
+
 ## stop all active containers
 ```
 docker stop $(docker ps -q)

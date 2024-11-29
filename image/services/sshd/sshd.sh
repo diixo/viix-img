@@ -23,3 +23,8 @@ cp $SSHD_BUILD_PATH/keys/insecure_key /etc/insecure_key
 chmod 644 /etc/insecure_key*
 chown root:root /etc/insecure_key*
 cp $SSHD_BUILD_PATH/enable_insecure_key /usr/sbin/
+
+# generate rsa-key
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N "" -q
+# add rsa-key to SSH
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
