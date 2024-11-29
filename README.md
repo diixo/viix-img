@@ -25,7 +25,9 @@ winpty docker exec -it viix-container bash
 
 
 ## SSH status
+```
 service ssh status
+```
 
 
 ## stop all active containers
@@ -55,7 +57,7 @@ Configuring the base system for Docker-friendliness is no easy task. As stated b
 
 Baseimage-docker only contains essential components. Learn more about the rationale.⁠
 
-Ubuntu 16.04 LTS as base system.
+Ubuntu 22.04 LTS as base system.
 
 * A correct init process (learn more⁠).
 * Fixes APT incompatibilities with Docker.
