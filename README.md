@@ -57,16 +57,16 @@ Configuring the base system for Docker-friendliness is no easy task. As stated b
 
 Baseimage-docker only contains essential components. Learn more about the rationale.⁠
 
+
 **Ubuntu 22.04 LTS** as base system.
 
-* A correct init process (learn more⁠).
+* A correct init process [learn more](https://blog.phusion.nl/2015/01/20/docker-and-the-pid-1-zombie-reaping-problem/).
 * Fixes APT incompatibilities with Docker.
 * syslog-ng.
 * The cron daemon.
   * An optional SSH server (disabled by default), for those use cases where docker exec is inappropriate.
 Password and challenge-response authentication are disabled by default. Only key authentication is allowed.
   * It allows an predefined key by default to make debugging easy. You should replace this ASAP. See instructions.
-
   * [Runit](https://smarden.org/runit) for service supervision and management.
 
 
