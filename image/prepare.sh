@@ -47,8 +47,8 @@ apt-get update -y
 ## Upgrade all packages.
 apt-get dist-upgrade -y --no-install-recommends
 
-# SGE prepare dependencies
-#apt-get install -y pkgconf
+# prepare SGE dependencies
+apt-get install -y pkgconf
 
 ## Update libssl1.1
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
