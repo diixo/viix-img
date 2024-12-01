@@ -51,8 +51,8 @@ apt-get dist-upgrade -y --no-install-recommends
 apt-get install -y pkgconf # git cmake libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
 
 ## Update libssl1.1
-wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
-dpkg -i libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+wget -P /tmp http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
+dpkg -i /tmp/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
 
 ## Fix locale.
 $minimal_apt_get_install language-pack-en
