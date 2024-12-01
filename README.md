@@ -1,4 +1,4 @@
-# viix starter docker image
+# viix : minimal Ubuntu base image modified for Docker-friendliness
 
 
 Fork of [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker)
