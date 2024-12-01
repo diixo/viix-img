@@ -39,7 +39,7 @@ $minimal_apt_get_install apt-transport-https ca-certificates
 $minimal_apt_get_install software-properties-common gpg-agent
 
 ## Install extended packages
-apt-get install -y wget build-essential automake autoconf nano python3-pip
+apt-get install -y sudo wget build-essential automake autoconf nano python3-pip
 
 ## Updates information about available repository packages
 apt-get update -y
@@ -48,7 +48,7 @@ apt-get update -y
 apt-get dist-upgrade -y --no-install-recommends
 
 # prepare SGE dependencies
-apt-get install -y pkgconf #rsync libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
+apt-get install -y pkgconf # git cmake libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
 
 ## Update libssl1.1
 wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
