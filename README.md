@@ -1,4 +1,4 @@
-# aiveex
+# viix starter docker image
 
 
 Fork of [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker)
