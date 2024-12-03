@@ -36,10 +36,10 @@ $minimal_apt_get_install syslog-ng
 $minimal_apt_get_install apt-transport-https ca-certificates
 
 ## Install add-apt-repository
-$minimal_apt_get_install software-properties-common gpg-agent
+$minimal_apt_get_install software-properties-common gpg-agent openssl net-tools 
 
 ## Install extended packages
-apt-get install -y sudo wget build-essential automake autoconf nano python3-pip
+apt-get install -y sudo wget build-essential automake autoconf nano python3-pip git cmake
 
 ## Updates information about available repository packages
 apt-get update -y
@@ -48,7 +48,7 @@ apt-get update -y
 apt-get dist-upgrade -y --no-install-recommends
 
 # prepare SGE dependencies
-apt-get install -y pkgconf # git cmake libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
+apt-get install -y pkgconf # libgrpc-dev libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
 
 ## Update libssl1.1
 wget -P /tmp http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
