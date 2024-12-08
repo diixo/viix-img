@@ -15,22 +15,22 @@ services:
     container_name: phusion
     ports:
       - "2222:22"
-    command: "/usr/sbin/sshd -D &&
-              cp /service/ssh/id_rsa.pub /shared/id_rsa.pub"
     volumes:
       - shared-data:/shared
+    command: "/usr/sbin/sshd -D && cp /service/ssh/id_rsa.pub /shared/id_rsa.pub"
 
   sge:
     image: diixo/sge-new:latest
+    depends_on:
+      - app
     container_name: sge
     stdin_open: true
     tty: true
 
-      #cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
-      #chmod 600 /home/sgeuser/.ssh/authorized_keys && \
     command: /bin/bash -c "
       mkdir -p /home/sgeuser/.ssh && \
       chmod 700 /home/sgeuser/.ssh && \
+      cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
       chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
       /usr/sbin/sshd -D"
     volumes:
