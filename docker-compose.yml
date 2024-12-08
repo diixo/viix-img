@@ -1,0 +1,23 @@
+# winpty docker exec -it phusion bash
+
+# check SSH:
+# ssh -i key/id_rsa root@localhost -p 2222
+
+
+services:
+  phusion:
+    build:
+      context: ./image/docker.compose
+    image: phusionimg
+    container_name: phusion
+    ports:
+      - "2222:22"
+    command: >
+      bash -c "mkdir -p /service/ssh && 
+               ssh-keygen -t rsa -b 4096 -f /service/ssh/id_rsa -N '' && 
+               cat /service/ssh/id_rsa.pub >> /service/ssh/authorized_keys && 
+               chmod 700 /service/ssh && 
+               chmod 600 /service/ssh/id_rsa && 
+               chmod 644 /service/ssh/id_rsa.pub && 
+               chmod 644 /service/ssh/authorized_keys && 
+               /usr/sbin/sshd -D"
