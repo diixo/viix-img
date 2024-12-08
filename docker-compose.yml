@@ -1,23 +1,40 @@
 # winpty docker exec -it phusion bash
 
+# winpty docker exec -it sge bash
+
 # check SSH:
 # ssh -i key/id_rsa root@localhost -p 2222
 
 
 services:
-  phusion:
+
+  app:
     build:
-      context: ./image/docker.compose
+      context: ./image
     image: phusionimg
     container_name: phusion
     ports:
       - "2222:22"
-    command: >
-      bash -c "mkdir -p /service/ssh && 
-               ssh-keygen -t rsa -b 4096 -f /service/ssh/id_rsa -N '' && 
-               cat /service/ssh/id_rsa.pub >> /service/ssh/authorized_keys && 
-               chmod 700 /service/ssh && 
-               chmod 600 /service/ssh/id_rsa && 
-               chmod 644 /service/ssh/id_rsa.pub && 
-               chmod 644 /service/ssh/authorized_keys && 
-               /usr/sbin/sshd -D"
+    command: "/usr/sbin/sshd -D &&
+              cp /service/ssh/id_rsa.pub /shared/id_rsa.pub"
+    volumes:
+      - shared-data:/shared
+
+  sge:
+    image: diixo/sge-new:latest
+    container_name: sge
+    stdin_open: true
+    tty: true
+
+      #cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
+      #chmod 600 /home/sgeuser/.ssh/authorized_keys && \
+    command: /bin/bash -c "
+      mkdir -p /home/sgeuser/.ssh && \
+      chmod 700 /home/sgeuser/.ssh && \
+      chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
+      /usr/sbin/sshd -D"
+    volumes:
+      - shared-data:/shared
+
+volumes:
+  shared-data:
