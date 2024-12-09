@@ -17,7 +17,7 @@ docker-compose down --volumes
 ```
 
 
-## Docker
+## Docker:
 Use **Dockerfile1**
 
 ### build
@@ -44,7 +44,7 @@ winpty docker exec -it new_container bash
 ```
 
 
-## SSH
+## SSH:
 ### SSH status
 ```
 service ssh status
