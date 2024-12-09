@@ -1,6 +1,11 @@
+
 # winpty docker exec -it phusion bash
 
-# winpty docker exec -it sge bash
+# 1. connection from phusion to apptest:
+# ssh -i /service/ssh/id_rsa root@apptest
+
+# 2. connection from phusion to sge:
+# ssh -i /service/ssh/id_rsa sgeuser@sge
 
 # check SSH:
 # ssh -i key/id_rsa root@localhost -p 2222
@@ -8,33 +13,46 @@
 
 services:
 
-  app:
+  phusion:
     build:
       context: ./image
     image: phusionimg
     container_name: phusion
-    ports:
-      - "2222:22"
     volumes:
       - shared-data:/shared
-    command: "/usr/sbin/sshd -D && cp /service/ssh/id_rsa.pub /shared/id_rsa.pub"
-
-  sge:
-    image: diixo/sge-new:latest
-    depends_on:
-      - app
-    container_name: sge
-    stdin_open: true
-    tty: true
-
     command: /bin/bash -c "
-      mkdir -p /home/sgeuser/.ssh && \
-      chmod 700 /home/sgeuser/.ssh && \
-      cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
-      chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
+      cp /service/ssh/id_rsa.pub /shared/id_rsa.pub && \
       /usr/sbin/sshd -D"
+
+
+  apptest:
+    image: phusionimg
+    depends_on:
+      - phusion
+    container_name: apptest
     volumes:
       - shared-data:/shared
+    command: /bin/bash -c "
+      cat /shared/id_rsa.pub >> /root/.ssh/authorized_keys && \
+      /usr/sbin/sshd -D"
+
+
+  # sge:
+  #   image: diixo/sge-new:latest
+  #   depends_on:
+  #     - phusion
+  #   container_name: sge
+  #   stdin_open: true
+  #   tty: true
+
+  #   command: /bin/bash -c "
+  #     mkdir -p /home/sgeuser/.ssh && \
+  #     chmod 700 /home/sgeuser/.ssh && \
+  #     cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
+  #     chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
+  #     /usr/sbin/sshd -D"
+  #   volumes:
+  #     - shared-data:/shared
 
 volumes:
   shared-data:

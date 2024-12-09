@@ -25,7 +25,6 @@ docker run -d --name new_container -p 2222:22 viix:22.04
 
 Test SSH connection by using insecure_key locally:
 ```
-chmod 600 image/services/sshd/keys/insecure_key
 ssh -i image/services/sshd/keys/insecure_key root@localhost -p 2222
 ```
 
