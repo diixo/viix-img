@@ -6,6 +6,17 @@ Fork of [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker)
 Current version was adapted for ubuntu: 22.04
 
 
+## Docker-compose:
+#### run containers orchestration:
+```
+docker-compose up -d --build
+```
+#### stop containers orchestration:
+```
+docker-compose down --volumes
+```
+
+
 ## build
 ```
 docker build -f image/Dockerfile -t viix:22.04 .
@@ -21,11 +32,6 @@ docker run -d --name new_container viix:22.04
 ## run with SSH
 ```
 docker run -d --name new_container -p 2222:22 viix:22.04
-```
-
-Test SSH connection by using insecure_key locally:
-```
-ssh -i image/services/sshd/keys/insecure_key root@localhost -p 2222
 ```
 
 
