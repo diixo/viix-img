@@ -1,8 +1,10 @@
 
+# docker-compose -f docker-compose-sge.yml up -d
+# docker-compose -f docker-compose-sge.yml down --volumes
+
 # winpty docker exec -it sge bash
 
-# docker-compose -f docker-compose-sge.yml up -d
-# docker-compose -f docker-compose-sge.yml down
+# nano /etc/ssh/sshd_config
 
 
 services:
