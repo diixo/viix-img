@@ -1,0 +1,24 @@
+
+# winpty docker exec -it sge bash
+
+# docker-compose -f docker-compose-sge.yml up -d
+# docker-compose -f docker-compose-sge.yml down
+
+
+services:
+
+  sge:
+    image: diixo/sge-new:latest
+    container_name: sge
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./shared:/shared
+    command: /bin/bash -c "
+      mkdir -p /home/sgeuser/.ssh && \
+      touch /home/sgeuser/.ssh/authorized_keys && \
+      cat /shared/authorized_keys >> /home/sgeuser/.ssh/authorized_keys && \
+      chmod 700 /home/sgeuser/.ssh && \
+      chmod 600 /home/sgeuser/.ssh/authorized_keys && \
+      chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
+      /usr/sbin/sshd -D"
