@@ -3,6 +3,7 @@
 
 # 1. connection from phusion to apptest:
 # ssh -i /service/ssh/id_rsa root@apptest
+# ssh -i /etc/insecure_key root@apptest
 
 # 2. connection from phusion to sge:
 # ssh -i /service/ssh/id_rsa sgeuser@sge
@@ -30,6 +31,8 @@ services:
     depends_on:
       - phusion
     container_name: apptest
+    ports:
+      - "2222:22"
     volumes:
       - shared-data:/shared
     command: /bin/bash -c "
