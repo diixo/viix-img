@@ -17,31 +17,35 @@ docker-compose down --volumes
 ```
 
 
-## build
+## Docker
+Use **Dockerfile1**
+
+### build
 ```
-docker build -f image/Dockerfile -t viix:22.04 .
+docker build -f image/Dockerfile1 -t viix:22.04 .
 ```
 
 
-## run
+### run
 ```
 docker run -d --name new_container viix:22.04
 ```
 
 
-## run with SSH
+### run with SSH
 ```
 docker run -d --name new_container -p 2222:22 viix:22.04
 ```
 
 
-## access into docker
+### access into docker
 ```
 winpty docker exec -it new_container bash
 ```
 
 
-## SSH status
+## SSH
+### SSH status
 ```
 service ssh status
 ```
