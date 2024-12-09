@@ -26,10 +26,5 @@ RUN rm -f /etc/service/sshd/down
 RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # <-------------------------------
 
-# Generation SSH-keys
-RUN mkdir -p /service/ssh && chmod 700 /service/ssh
-RUN ssh-keygen -t rsa -b 4096 -f /service/ssh/id_rsa -N "" && \
-    chmod 600 /service/ssh/id_rsa && \
-    chmod 644 /service/ssh/id_rsa.pub
 
 CMD ["/sbin/my_init"]

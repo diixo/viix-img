@@ -1,13 +1,18 @@
 
+# Steps for testing connection from phusion:
 # winpty docker exec -it phusion bash
 
-# 1. connection from phusion to apptest:
-# ssh -i /service/ssh/id_rsa root@apptest
+# 1. Test: native key to apptest:
+# ssh -i /etc/ssh/ssh_host_rsa_key root@apptest
 
-# 2. connection from phusion to sge:
-# ssh -i /service/ssh/id_rsa sgeuser@sge
+# 2. Test: native key to sge:
+# ssh -i /etc/ssh/ssh_host_rsa_key sgeuser@sge
 
-# check SSH:
+# 3. Test: calcium to sge-server:
+# ssh -i /service/ssh/id_rsa_dev sgeuser@sge-server
+
+####################################################
+# check local SSH connection:
 # ssh -i key/id_rsa root@localhost -p 2222
 
 
@@ -20,8 +25,9 @@ services:
     container_name: phusion
     volumes:
       - shared-data:/shared
+      - ./keys:/service/ssh/
     command: /bin/bash -c "
-      cp /service/ssh/id_rsa.pub /shared/id_rsa.pub && \
+      cp /etc/ssh/ssh_host_rsa_key.pub /shared/id_rsa.pub && \
       /usr/sbin/sshd -D"
 
 
@@ -41,6 +47,7 @@ services:
 
   sge:
     image: diixo/sge-base:latest
+    pull_policy: always
     container_name: sge
     stdin_open: true
     tty: true
@@ -51,6 +58,16 @@ services:
       touch /home/sgeuser/.ssh/authorized_keys && \
       cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
       /usr/sbin/sshd -D"
+
+
+  sge-server:
+    image: diixo/sge-ssh:latest
+    pull_policy: always
+    hostname: sge-server
+    container_name: sge-server
+    stdin_open: true
+    tty: true
+    command: /bin/bash -c "/usr/sbin/sshd -D"
 
 
 volumes:
