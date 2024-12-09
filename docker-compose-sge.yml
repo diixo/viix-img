@@ -6,11 +6,13 @@
 
 # nano /etc/ssh/sshd_config
 
+# sge-base: switched SSH authentication from passwords to keys
+
 
 services:
 
   sge:
-    image: diixo/sge-new:latest
+    image: diixo/sge-base:latest
     container_name: sge
     stdin_open: true
     tty: true
