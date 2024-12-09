@@ -44,6 +44,12 @@ winpty docker exec -it new_container bash
 ```
 
 
+## stop all active containers
+```
+docker stop $(docker ps -q)
+```
+
+
 ## SSH:
 ### SSH status
 ```
@@ -58,11 +64,6 @@ cd /etc/ssh
 SSH settings:
 ```
 cat /etc/ssh/sshd_config
-```
-
-## stop all active containers
-```
-docker stop $(docker ps -q)
 ```
 
 
