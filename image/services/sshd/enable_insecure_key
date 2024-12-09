@@ -26,5 +26,6 @@ else
 
 	EOF
 	cat /etc/insecure_key
+	chmod 600 /etc/insecure_key
 	echo -e "\n\n"
 fi
