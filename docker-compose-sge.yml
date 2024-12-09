@@ -22,7 +22,4 @@ services:
       mkdir -p /home/sgeuser/.ssh && \
       touch /home/sgeuser/.ssh/authorized_keys && \
       cat /shared/authorized_keys >> /home/sgeuser/.ssh/authorized_keys && \
-      chmod 700 /home/sgeuser/.ssh && \
-      chmod 600 /home/sgeuser/.ssh/authorized_keys && \
-      chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
       /usr/sbin/sshd -D"

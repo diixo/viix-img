@@ -3,7 +3,6 @@
 
 # 1. connection from phusion to apptest:
 # ssh -i /service/ssh/id_rsa root@apptest
-# ssh -i /etc/insecure_key root@apptest
 
 # 2. connection from phusion to sge:
 # ssh -i /service/ssh/id_rsa sgeuser@sge
@@ -40,22 +39,19 @@ services:
       /usr/sbin/sshd -D"
 
 
-  # sge:
-  #   image: diixo/sge-new:latest
-  #   depends_on:
-  #     - phusion
-  #   container_name: sge
-  #   stdin_open: true
-  #   tty: true
+  sge:
+    image: diixo/sge-base:latest
+    container_name: sge
+    stdin_open: true
+    tty: true
+    volumes:
+      - shared-data:/shared
+    command: /bin/bash -c "
+      mkdir -p /home/sgeuser/.ssh && \
+      touch /home/sgeuser/.ssh/authorized_keys && \
+      cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
+      /usr/sbin/sshd -D"
 
-  #   command: /bin/bash -c "
-  #     mkdir -p /home/sgeuser/.ssh && \
-  #     chmod 700 /home/sgeuser/.ssh && \
-  #     cat /shared/id_rsa.pub >> /home/sgeuser/.ssh/authorized_keys && \
-  #     chown sgeuser:sgeuser /home/sgeuser/.ssh* && \
-  #     /usr/sbin/sshd -D"
-  #   volumes:
-  #     - shared-data:/shared
 
 volumes:
   shared-data:
