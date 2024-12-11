@@ -8,7 +8,7 @@
 
 # sge-base: switched SSH authentication from passwords to keys
 
-
+# Construct container to embedd authorized_keys with public keys list inside
 services:
 
   sge:

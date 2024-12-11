@@ -5,10 +5,13 @@
 # 1. Test: native key to apptest:
 # ssh -i /etc/ssh/ssh_host_rsa_key root@apptest
 
-# 2. Test: native key to sge:
+# 2. Test: calcium key to dev:
+# ssh -i /service/ssh/id_rsa_dev root@dev
+
+# 3. Test: native key to sge:
 # ssh -i /etc/ssh/ssh_host_rsa_key sgeuser@sge
 
-# 3. Test: calcium to sge-server:
+# 4. Test: calcium key to sge-server:
 # ssh -i /service/ssh/id_rsa_dev sgeuser@sge-server
 
 ####################################################
@@ -42,6 +45,21 @@ services:
       - shared-data:/shared
     command: /bin/bash -c "
       cat /shared/id_rsa.pub >> /root/.ssh/authorized_keys && \
+      /usr/sbin/sshd -D"
+
+
+  dev:
+    image: phusionimg
+    depends_on:
+      - phusion
+    container_name: dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./keys:/service/ssh/
+    command: /bin/bash -c "
+      mkdir -p /home/sgeuser/.ssh && \
+      cat /service/ssh/id_rsa_dev.pub >> /root/.ssh/authorized_keys && \
       /usr/sbin/sshd -D"
 
 
