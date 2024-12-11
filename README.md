@@ -3,7 +3,7 @@
 
 Fork of [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker)
 
-Current version was adapted for ubuntu: 22.04
+Current version was besed on **ubuntu:22.04**
 
 
 ## Docker-compose:
