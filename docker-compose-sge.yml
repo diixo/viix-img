@@ -2,8 +2,9 @@
 # docker-compose -f docker-compose-sge.yml up -d
 # docker-compose -f docker-compose-sge.yml down --volumes
 
-# winpty docker exec -it sge bash
+# winpty docker exec -it sge-ssh bash
 
+# cat /etc/ssh/sshd_config
 # nano /etc/ssh/sshd_config
 
 # sge-base: switched SSH authentication from passwords to keys
@@ -11,15 +12,18 @@
 # Construct container to embedd authorized_keys with public keys list inside
 services:
 
-  sge:
+  sge-ssh:
     image: diixo/sge-base:latest
-    container_name: sge
+    container_name: sge-ssh
     stdin_open: true
     tty: true
     volumes:
       - ./shared:/shared
+      - ./config:/config
     command: /bin/bash -c "
       mkdir -p /home/sgeuser/.ssh && \
       touch /home/sgeuser/.ssh/authorized_keys && \
       cat /shared/authorized_keys >> /home/sgeuser/.ssh/authorized_keys && \
+      mkdir -p /var/opt/conf && \
+      cp -r /config/* /var/opt/conf/ && \
       /usr/sbin/sshd -D"
