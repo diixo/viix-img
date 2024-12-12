@@ -3,7 +3,48 @@
 
 Fork of [phusion/baseimage-docker](https://github.com/phusion/baseimage-docker)
 
-Current version was besed on **ubuntu:22.04**
+Current version was based on **ubuntu:22.04**
+
+
+-----------------------------------------
+
+
+**Table of contents**
+
+ * [What's inside the image?](#whats_inside)
+   * [Overview](#whats_inside_overview)
+   * [Wait, I thought Docker is about running a single process in a container?](#docker_single_process)
+   * [Does Baseimage-docker advocate "fat containers" or "treating containers as VMs"?](#fat_containers)
+ * [Inspecting baseimage-docker](#inspecting)
+ * [Using baseimage-docker as base image](#using)
+   * [Getting started](#getting_started)
+   * [Adding additional daemons](#adding_additional_daemons)
+   * [Running scripts during container startup](#running_startup_scripts)
+   * [Environment variables](#environment_variables)
+     * [Centrally defining your own environment variables](#envvar_central_definition)
+     * [Environment variable dumps](#envvar_dumps)
+     * [Modifying environment variables](#modifying_envvars)
+     * [Security](#envvar_security)
+   * [System logging](#logging)
+   * [Upgrading the operating system inside the container](#upgrading_os)
+ * [Container administration](#container_administration)
+   * [Running a one-shot command in a new container](#oneshot)
+   * [Running a command in an existing, running container](#run_inside_existing_container)
+   * [Login to the container via `docker exec`](#login_docker_exec)
+     * [Usage](#docker_exec)
+   * [Login to the container via SSH](#login_ssh)
+     * [Enabling SSH](#enabling_ssh)
+     * [About SSH keys](#ssh_keys)
+     * [Using the insecure key for one container only](#using_the_insecure_key_for_one_container_only)
+     * [Enabling the insecure key permanently](#enabling_the_insecure_key_permanently)
+     * [Using your own key](#using_your_own_key)
+     * [The `docker-ssh` tool](#docker_ssh)
+ * [Building the image yourself](#building)
+  * [Removing optional services](#removing_optional_services)
+ * [Conclusion](#conclusion)
+
+-----------------------------------------
+
 
 
 ## Docker-compose:
@@ -65,6 +106,128 @@ SSH settings:
 ```
 cat /etc/ssh/sshd_config
 ```
+
+
+<a name="enabling_ssh"></a>
+#### Enabling SSH
+
+Baseimage-docker disables the SSH server by default. Add the following to your Dockerfile to enable it:
+
+    RUN rm -f /etc/service/sshd/down
+
+    # Regenerate SSH host keys. baseimage-docker does not contain any, so you
+    # have to do that yourself. You may also comment out this instruction; the
+    # init system will auto-generate one during boot.
+    RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
+
+Alternatively, to enable sshd only for a single instance of your container, create a folder with a [startup script](#running_startup_scripts).  The contents of that should be
+
+    ### In myfolder/enable_ssh.sh (make sure this file is chmod +x):
+    #!/bin/sh
+    rm -f /etc/service/sshd/down
+    ssh-keygen -P "" -t dsa -f /etc/ssh/ssh_host_dsa_key
+
+Then, you can start your container with
+
+    docker run -d -v `pwd`/myfolder:/etc/my_init.d my/dockerimage
+
+This will initialize sshd on container boot.  You can then access it with the insecure key as below, or using the methods to add a secure key.  Further, you can publish the port to your machine with -p 2222:22 allowing you to ssh to 127.0.0.1:2222 instead of looking up the ip address of the container.
+
+<a name="ssh_keys"></a>
+#### About SSH keys
+
+First, you must ensure that you have the right SSH keys installed inside the container. By default, no keys are installed, so nobody can login. For convenience reasons, we provide [a pregenerated, insecure key](https://github.com/phusion/baseimage-docker/blob/master/image/services/sshd/keys/insecure_key) [(PuTTY format)](https://github.com/phusion/baseimage-docker/blob/master/image/services/sshd/keys/insecure_key.ppk) that you can easily enable. However, please be aware that using this key is for convenience only. It does not provide any security because this key (both the public and the private side) is publicly available. **In production environments, you should use your own keys**.
+
+<a name="using_the_insecure_key_for_one_container_only"></a>
+#### Using the insecure key for one container only
+
+You can temporarily enable the insecure key for one container only. This means that the insecure key is installed at container boot. If you `docker stop` and `docker start` the container, the insecure key will still be there, but if you use `docker run` to start a new container then that container will not contain the insecure key.
+
+Start a container with `--enable-insecure-key`:
+
+    docker run YOUR_IMAGE /sbin/my_init --enable-insecure-key
+
+Find out the ID of the container that you just ran:
+
+    docker ps
+
+Once you have the ID, look for its IP address with:
+
+    docker inspect -f "{{ .NetworkSettings.IPAddress }}" <ID>
+
+Now that you have the IP address, you can use SSH to login to the container, or to execute a command inside it:
+
+    # Download the insecure private key
+    curl -o insecure_key -fSL https://github.com/phusion/baseimage-docker/raw/master/image/services/sshd/keys/insecure_key
+    chmod 600 insecure_key
+
+    # Login to the container
+    ssh -i insecure_key root@<IP address>
+
+    # Running a command inside the container
+    ssh -i insecure_key root@<IP address> echo hello world
+
+<a name="enabling_the_insecure_key_permanently"></a>
+#### Enabling the insecure key permanently
+
+It is also possible to enable the insecure key in the image permanently. This is not generally recommended, but is suitable for e.g. temporary development or demo environments where security does not matter.
+
+Edit your Dockerfile to install the insecure key permanently:
+
+    RUN /usr/sbin/enable_insecure_key
+
+Instructions for logging into the container is the same as in section [Using the insecure key for one container only](#using_the_insecure_key_for_one_container_only).
+
+<a name="using_your_own_key"></a>
+#### Using your own key
+
+Edit your Dockerfile to install an SSH public key:
+
+    ## Install an SSH of your choice.
+    COPY your_key.pub /tmp/your_key.pub
+    RUN cat /tmp/your_key.pub >> /root/.ssh/authorized_keys && rm -f /tmp/your_key.pub
+
+Then rebuild your image. Once you have that, start a container based on that image:
+
+    docker run your-image-name
+
+Find out the ID of the container that you just ran:
+
+    docker ps
+
+Once you have the ID, look for its IP address with:
+
+    docker inspect -f "{{ .NetworkSettings.IPAddress }}" <ID>
+
+Now that you have the IP address, you can use SSH to login to the container, or to execute a command inside it:
+
+    # Login to the container
+    ssh -i /path-to/your_key root@<IP address>
+
+    # Running a command inside the container
+    ssh -i /path-to/your_key root@<IP address> echo hello world
+
+<a name="docker_ssh"></a>
+#### The `docker-ssh` tool
+
+Looking up the IP of a container and running an SSH command quickly becomes tedious. Luckily, we provide the `docker-ssh` tool which automates this process. This tool is to be run on the *Docker host*, not inside a Docker container.
+
+First, install the tool on the Docker host:
+
+    curl --fail -L -O https://github.com/phusion/baseimage-docker/archive/master.tar.gz && \
+    tar xzf master.tar.gz && \
+    sudo ./baseimage-docker-master/install-tools.sh
+
+Then run the tool as follows to login to a container using SSH:
+
+    docker-ssh YOUR-CONTAINER-ID
+
+You can lookup `YOUR-CONTAINER-ID` by running `docker ps`.
+
+By default, `docker-ssh` will open a Bash session. You can also tell it to run a command, and then exit:
+
+    docker-ssh YOUR-CONTAINER-ID echo hello world
+
 
 
 ### What are the problems with the stock Ubuntu base image?
