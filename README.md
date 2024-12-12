@@ -207,26 +207,6 @@ Now that you have the IP address, you can use SSH to login to the container, or 
     # Running a command inside the container
     ssh -i /path-to/your_key root@<IP address> echo hello world
 
-<a name="docker_ssh"></a>
-#### The `docker-ssh` tool
-
-Looking up the IP of a container and running an SSH command quickly becomes tedious. Luckily, we provide the `docker-ssh` tool which automates this process. This tool is to be run on the *Docker host*, not inside a Docker container.
-
-First, install the tool on the Docker host:
-
-    curl --fail -L -O https://github.com/phusion/baseimage-docker/archive/master.tar.gz && \
-    tar xzf master.tar.gz && \
-    sudo ./baseimage-docker-master/install-tools.sh
-
-Then run the tool as follows to login to a container using SSH:
-
-    docker-ssh YOUR-CONTAINER-ID
-
-You can lookup `YOUR-CONTAINER-ID` by running `docker ps`.
-
-By default, `docker-ssh` will open a Bash session. You can also tell it to run a command, and then exit:
-
-    docker-ssh YOUR-CONTAINER-ID echo hello world
 
 
 
