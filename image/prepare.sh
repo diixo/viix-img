@@ -48,7 +48,7 @@ apt-get update -y
 apt-get dist-upgrade -y --no-install-recommends
 
 # prepare SGE dependencies
-#apt-get install -y pkgconf git cmake # libgrpc-dev libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
+apt-get install -y pkgconf git cmake # libgrpc-dev libdb5.3-dev libhwloc-dev libmotif-dev libncurses-dev libpam0g-dev libssl-dev libsystemd-dev libtirpc-dev libxext-dev
 
 ## Update libssl1.1
 wget -P /tmp http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.0g-2ubuntu4_amd64.deb
