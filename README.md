@@ -15,8 +15,12 @@ Current version was based on **ubuntu:22.04**
    * [Build](#docker_build)
    * [Run](#docker_run)
    * [Run with SSH](#run_with_ssh)
-   * [Access into docker](#docker_access_into_docker)
+   * [Access into docker](#access_into_docker)
    * [Stop all active containers](#docker_stop_all)
+
+ * [SSH service](#ssh_service)
+   * [SSH status](#ssh_status)
+   * [SSH settings](#ssh_settings)
 
  * [Container administration](#container_administration)
    * [Running a one-shot command in a new container](#oneshot)
@@ -24,7 +28,6 @@ Current version was based on **ubuntu:22.04**
    * [Login to the container via `docker exec`](#login_docker_exec)
      * [Usage](#docker_exec)
    * [Login to the container via SSH](#login_ssh)
-     * [SSH settings](#ssh_settings)
      * [Enabling SSH](#enabling_ssh)
      * [About SSH keys](#ssh_keys)
      * [Using the insecure key for one container only](#using_the_insecure_key_for_one_container_only)
@@ -72,7 +75,7 @@ docker run -d --name new_container -p 2222:22 viix:22.04
 ```
 
 
-<a name="docker_access_into_docker"></a>
+<a name="access_into_docker"></a>
 ### access into docker
 ```
 winpty docker exec -it new_container bash
@@ -88,6 +91,8 @@ docker stop $(docker ps -q)
 
 <a name="ssh_service"></a>
 ## SSH:
+
+<a name="ssh_status"></a>
 ### SSH status
 ```
 service ssh status
@@ -104,6 +109,62 @@ cd /etc/ssh
 ```
 cat /etc/ssh/sshd_config
 ```
+
+<a name="container_administration"></a>
+## Container administration
+
+One of the ideas behind Docker is that containers should be stateless, easily restartable, and behave like a black box. However, you may occasionally encounter situations where you want to login to a container, or to run a command inside a container, for development, inspection and debugging purposes. This section describes how you can administer the container for those purposes.
+
+<a name="oneshot"></a>
+### Running a one-shot command in a new container
+
+_**Note:** This section describes how to run a command insider a -new- container. To run a command inside an existing running container, see [Running a command in an existing, running container](#run_inside_existing_container)._
+
+Normally, when you want to create a new container in order to run a single command inside it, and immediately exit after the command exits, you invoke Docker like this:
+
+    docker run YOUR_IMAGE COMMAND ARGUMENTS...
+
+However the downside of this approach is that the init system is not started. That is, while invoking `COMMAND`, important daemons such as cron and syslog are not running. Also, orphaned child processes are not properly reaped, because `COMMAND` is PID 1.
+
+Baseimage-docker provides a facility to run a single one-shot command, while solving all of the aforementioned problems. Run a single command in the following manner:
+
+    docker run YOUR_IMAGE /sbin/my_init -- COMMAND ARGUMENTS ...
+
+This will perform the following:
+
+ * Runs all system startup files, such as /etc/my_init.d/* and /etc/rc.local.
+ * Starts all runit services.
+ * Runs the specified command.
+ * When the specified command exits, stops all runit services.
+
+For example:
+
+    $ docker run phusion/baseimage:<VERSION> /sbin/my_init -- ls
+    *** Running /etc/rc.local...
+    *** Booting runit daemon...
+    *** Runit started as PID 80
+    *** Running ls...
+    bin  boot  dev  etc  home  image  lib  lib64  media  mnt  opt  proc  root  run  sbin  selinux  srv  sys  tmp  usr  var
+    *** ls exited with exit code 0.
+    *** Shutting down runit daemon (PID 80)...
+    *** Killing all processes...
+
+You may find that the default invocation is too noisy. Or perhaps you don't want to run the startup files. You can customize all this by passing arguments to `my_init`. Invoke `docker run YOUR_IMAGE /sbin/my_init --help` for more information.
+
+The following example runs `ls` without running the startup files and with less messages, while running all runit services:
+
+    $ docker run phusion/baseimage:<VERSION> /sbin/my_init --skip-startup-files --quiet -- ls
+    bin  boot  dev  etc  home  image  lib  lib64  media  mnt  opt  proc  root  run  sbin  selinux  srv  sys  tmp  usr  var
+
+<a name="run_inside_existing_container"></a>
+### Running a command in an existing, running container
+
+There are two ways to run a command inside an existing, running container.
+
+ * Through the `docker exec` tool. This is builtin Docker tool, available since Docker 1.4. Internally, it uses Linux kernel system calls in order to execute a command within the context of a container. Learn more in [Login to the container, or running a command inside it, via `docker exec`](#login_docker_exec).
+ * Through SSH. This approach requires running an SSH daemon inside the container, and requires you to setup SSH keys. Learn more in [Login to the container, or running a command inside it, via SSH](#login_ssh).
+
+Both way have their own pros and cons, which you can learn in their respective subsections.
 
 
 <a name="login_ssh"></a>
