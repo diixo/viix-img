@@ -17,11 +17,9 @@ Current version was based on **ubuntu:22.04**
    * [Run with SSH](#run_with_ssh)
    * [Access into docker](#access_into_docker)
    * [Stop all active containers](#docker_stop_all)
-
  * [SSH service](#ssh_service)
    * [SSH status](#ssh_status)
    * [SSH settings](#ssh_settings)
-
  * [Container administration](#container_administration)
    * [Running a one-shot command in a new container](#oneshot)
    * [Running a command in an existing, running container](#run_inside_existing_container)
