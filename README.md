@@ -53,7 +53,6 @@ docker-compose down --volumes
 <a name="docker"></a>
 ## Docker:
 Use **Dockerfile1**
-
 <a name="docker_build"></a>
 ### build
 ```
@@ -91,7 +90,6 @@ docker stop $(docker ps -q)
 
 <a name="ssh_service"></a>
 ## SSH:
-
 <a name="ssh_status"></a>
 ### SSH status
 ```
