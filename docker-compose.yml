@@ -34,6 +34,7 @@ services:
       /usr/sbin/sshd -D"
 
 
+  # 1.
   apptest:
     image: phusionimg
     depends_on:
@@ -48,6 +49,7 @@ services:
       /usr/sbin/sshd -D"
 
 
+  # 2.
   dev:
     image: phusionimg
     depends_on:
@@ -63,6 +65,7 @@ services:
       /usr/sbin/sshd -D"
 
 
+  # 3.
   sge:
     image: diixo/sge-base:latest
     pull_policy: always
@@ -78,6 +81,7 @@ services:
       /usr/sbin/sshd -D"
 
 
+  # 4.
   sge-server:
     image: diixo/sge-ssh:latest
     pull_policy: always

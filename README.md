@@ -8,9 +8,7 @@ Current version was based on **ubuntu:22.04**
 
 -----------------------------------------
 
-
 **Table of contents**
- * [Docker-compose](#docker_compose)
  * [Docker](#docker)
    * [Build](#docker_build)
    * [Run](#docker_run)
@@ -20,6 +18,7 @@ Current version was based on **ubuntu:22.04**
  * [SSH service](#ssh_service)
    * [SSH status](#ssh_status)
    * [SSH settings](#ssh_settings)
+ * [Docker-compose](#docker_compose)
  * [Container administration](#container_administration)
    * [Running a one-shot command in a new container](#oneshot)
    * [Running a command in an existing, running container](#run_inside_existing_container)
@@ -34,18 +33,6 @@ Current version was based on **ubuntu:22.04**
  * [References](#references)
 
 -----------------------------------------
-
-
-<a name="docker_compose"></a>
-## Docker-compose:
-#### run containers orchestration:
-```
-docker-compose up -d --build
-```
-#### stop containers orchestration:
-```
-docker-compose down --volumes
-```
 
 
 <a name="docker"></a>
@@ -105,6 +92,19 @@ cd /etc/ssh
 ```
 cat /etc/ssh/sshd_config
 ```
+
+
+<a name="docker_compose"></a>
+## Docker-compose:
+#### run containers orchestration:
+```
+docker-compose up -d --build
+```
+#### stop containers orchestration:
+```
+docker-compose down --volumes
+```
+
 
 <a name="container_administration"></a>
 ## Container administration
