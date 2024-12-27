@@ -15,10 +15,10 @@ Current version was based on **ubuntu:22.04**
    * [Run with SSH](#run_with_ssh)
    * [Access into docker](#access_into_docker)
    * [Stop all active containers](#docker_stop_all)
+ * [Docker-compose](#docker_compose)
  * [SSH service](#ssh_service)
    * [SSH status](#ssh_status)
    * [SSH settings](#ssh_settings)
- * [Docker-compose](#docker_compose)
  * [Container administration](#container_administration)
    * [Running a one-shot command in a new container](#oneshot)
    * [Running a command in an existing, running container](#run_inside_existing_container)
@@ -73,6 +73,18 @@ docker stop $(docker ps -q)
 ```
 
 
+<a name="docker_compose"></a>
+## Docker-compose:
+#### run containers orchestration:
+```
+docker-compose up -d --build
+```
+#### stop containers orchestration:
+```
+docker-compose down --volumes
+```
+
+
 <a name="ssh_service"></a>
 ## SSH:
 <a name="ssh_status"></a>
@@ -91,18 +103,6 @@ cd /etc/ssh
 #### SSH settings:
 ```
 cat /etc/ssh/sshd_config
-```
-
-
-<a name="docker_compose"></a>
-## Docker-compose:
-#### run containers orchestration:
-```
-docker-compose up -d --build
-```
-#### stop containers orchestration:
-```
-docker-compose down --volumes
 ```
 
 
