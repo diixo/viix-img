@@ -315,6 +315,7 @@ Password and challenge-response authentication are disabled by default. Only key
 
 [Learn more](https://github.com/phusion/baseimage-docker)
 
+[<img src="https://avatars.githubusercontent.com/u/830588?s=200&v=4">](https://www.phusion.nl/)
 
 <a name="references"></a>
 ## References:
